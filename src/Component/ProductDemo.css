@@ -1,0 +1,121 @@
+.demo-section {
+  padding: 40px 20px;
+
+  text-align: center;
+}
+
+.demo-header span {
+  color: #6C8CFF;
+  font-weight: 600;
+}
+
+.demo-header h2 {
+  margin-top: 10px;
+
+  font-size: 3rem;
+
+  color: #111827;
+}
+
+.demo-header p {
+  max-width: 600px;
+
+  margin: 20px auto 0;
+
+  color: #64748b;
+
+  line-height: 1.8;
+}
+
+.workflow {
+  margin-top: 80px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+.workflow-card {
+  width: 280px;
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 28px;
+
+  box-shadow: 0 20px 40px rgba(0,0,0,.06);
+}
+
+.workflow-card h3 {
+  margin-top: 15px;
+}
+
+.workflow-card p {
+  margin-top: 10px;
+
+  color: #64748b;
+}
+
+.ai-card {
+  background: linear-gradient(
+    135deg,
+    #6C8CFF,
+    #A78BFA
+  );
+
+  color: white;
+}
+
+.ai-card p {
+  color: rgba(255,255,255,.8);
+}
+
+.arrow {
+  font-size: 2rem;
+
+  color: #6C8CFF;
+}
+
+.results-grid {
+  display: flex;
+
+  gap: 20px;
+
+  flex-wrap: wrap;
+
+  justify-content: center;
+}
+
+.result-card {
+  width: 180px;
+
+  background: white;
+
+  padding: 25px;
+
+  border-radius: 24px;
+
+  box-shadow: 0 20px 40px rgba(0,0,0,.06);
+
+  cursor: pointer;
+}
+
+.result-card h4 {
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+
+  .demo-header h2 {
+    font-size: 2.2rem;
+  }
+
+  .result-card {
+    width: 150px;
+  }
+
+}

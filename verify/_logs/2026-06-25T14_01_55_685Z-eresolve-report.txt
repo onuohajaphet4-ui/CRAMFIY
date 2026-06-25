@@ -1,0 +1,18 @@
+'Log files:
+C:\Users\HomePC\Desktop\Btudy\Btudy\client\verify\_logs\2026-06-25T14_01_55_685Z-debug-0.log
+
+# npm resolution error report
+
+While resolving: client@0.0.0
+Found: react@19.2.7
+node_modules/react
+  react@"^19.2.7" from the root project
+
+Could not resolve dependency:
+peer react@"^18.2.0" from framer@3.0.4
+node_modules/framer
+  framer@"*" from the root project
+
+Fix the upstream dependency conflict, or retry
+this command with --force or --legacy-peer-deps
+to accept an incorrect (and potentially broken) dependency resolution.
