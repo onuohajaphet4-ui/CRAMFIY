@@ -30,7 +30,7 @@ function Signup() {
       setLoading(true);
 
       const res = await fetch(
-        "http://localhost:3000/api/auth/signup",
+        "https://cramfiy.onrender.com/api/auth/signup",
         {
           method: "POST",
           headers: {
