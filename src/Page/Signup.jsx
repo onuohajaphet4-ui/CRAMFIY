@@ -30,7 +30,7 @@ function Signup() {
       setLoading(true);
 
       const res = await fetch(
-        "http://localhost:5000/api/auth/signup",
+        "http://localhost:3000/api/auth/signup",
         {
           method: "POST",
           headers: {
@@ -47,8 +47,9 @@ function Signup() {
       }
 
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", data.user);
 
-      navigate("/dashboard");
+      navigate("/hub");
     } catch (error) {
       alert(error.message);
     } finally {

@@ -1,0 +1,134 @@
+.study-flow-section {
+  padding: 75px 7%;
+   background:
+  radial-gradient(
+    circle at top right,
+    rgba(108,140,255,.15),
+    transparent 40%
+  );
+
+}
+
+.study-flow-heading {
+  text-align: center;
+  margin-bottom: 38px;
+}
+
+.study-flow-heading > span {
+  color: #8170d5;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.study-flow-heading h2 {
+  margin: 12px 0;
+  color: #302d4b;
+  font-size: clamp(25px, 4vw, 35px);
+  font-weight: 800;
+}
+
+.study-flow-heading p {
+  color: #85839a;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.study-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.study-step {
+  padding: 23px 20px;
+  border: 1px solid #ebe7fa;
+  border-radius: 19px;
+  background: #fff;
+  transition: transform 0.25s;
+}
+
+.study-step:hover {
+  transform: translateY(-4px);
+}
+
+.step-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.step-icon {
+  width: 49px;
+  height: 49px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  background: #eeeaff;
+  color: #7865ce;
+}
+
+.study-step:nth-child(2) .step-icon {
+  background: #fff0dc;
+  color: #c47d32;
+}
+
+.study-step:nth-child(3) .step-icon {
+  background: #e5efff;
+  color: #4e73d7;
+}
+
+.study-step:nth-child(4) .step-icon {
+  background: #e0f6e9;
+  color: #37875a;
+}
+
+.step-top > span {
+  color: #b4addb;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.study-step h3 {
+  margin: 0 0 9px;
+  color: #3b3857;
+  font-size: 15px;
+}
+
+.study-step p {
+  margin: 0;
+  color: #85839a;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+@media (max-width: 900px) {
+  .study-flow-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 500px) {
+  .study-flow-section {
+    padding: 55px 6%;
+  }
+
+  .study-flow-grid {
+    gap: 12px;
+  }
+
+  .study-step {
+    padding: 18px 14px;
+  }
+
+  .study-step h3 {
+    font-size: 13px;
+  }
+
+  .study-step p {
+    font-size: 11px;
+  }
+}

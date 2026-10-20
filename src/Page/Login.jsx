@@ -29,7 +29,7 @@ function Login() {
       setLoading(true);
 
       const res = await fetch(
-        "http://localhost:5000/api/auth/login",
+        "http://localhost:3000/api/auth/login",
         {
           method: "POST",
           headers: {
@@ -46,8 +46,11 @@ function Login() {
       }
 
       localStorage.setItem("token", data.token);
+       localStorage.setItem("user", data.user);
+       console.log(data.user)
 
-      navigate("/dashboard");
+
+      navigate("/hub");
     } catch (error) {
       alert(error.message);
     } finally {

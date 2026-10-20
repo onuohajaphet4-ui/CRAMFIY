@@ -17,8 +17,8 @@ function Navbar() {
       <nav className="nav-links">
         <a href="/">Overview</a>
           
-        <a href="/">Features</a>
-        <a href="/">Study Flow</a>
+        <a href="/feature">Features</a>
+        <a href="/flow">Study Flow</a>
       </nav>
 
       <button className="login-btn">
@@ -36,8 +36,8 @@ function Navbar() {
       {/* Mobile Menu */}
       <div className={`mobile-menu ${isOpen ? "active" : ""}`}>
         <a href="/"> <House size={18} color=" #f97316" /> <span>Overview </span> </a>
-        <a href="/">  <Sparkle size={18} color=" #f97316" /> <span>Features </span> </a>
-        <a href="/">  <BookOpen size={18} color=" #f97316" />  <span>Study Flow</span></a>
+        <a href="/feature">  <Sparkle size={18} color=" #f97316" /> <span>Features </span> </a>
+        <a href="/flow">  <BookOpen size={18} color=" #f97316" />  <span>Study Flow</span></a>
 
 
 
