@@ -5,6 +5,7 @@ import Login from './Page/Login'
 import Signup from './Page/Signup';
 import Hub from './Page/Hub';
 import Feature from './Page/Feature';
+import Note from './Page/Note';
 import Flow from './Page/Flow';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path='/hub' element={<Hub/>} />
         <Route path='/flow' element={<Flow/>} />
         <Route path='/feature' element={<Feature/>} />
+        <Route path='/note' element={<Note/>} />
     </Routes>
   );
 }

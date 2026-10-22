@@ -46,7 +46,7 @@ function Login() {
       }
 
       localStorage.setItem("token", data.token);
-       localStorage.setItem("user", data.user);
+       localStorage.setItem("user", JSON.stringify(data.user));
        console.log(data.user)
 
 
@@ -122,7 +122,7 @@ function Login() {
 
             <button
               type="submit"
-              className="login-btn"
+              className="loginn-btn"
             >
               {
                 loading

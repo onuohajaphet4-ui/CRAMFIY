@@ -44,7 +44,7 @@ function Dashboard() {
 
   const savedUser = (() => {
     try {
-      return JSON.parse(localStorage.getItem(user) || "null");
+      return JSON.parse(localStorage.getItem("user") || "null");
     } catch {
       return null;
     }
@@ -54,18 +54,25 @@ function Dashboard() {
 
   const hour = new Date().getHours();
   const greeting =
-    hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+
+  
 
   const handleNavigation = (label) => {
-    setActivePage(label);
-    setMenuOpen(false);
+  setActivePage(label);
+  setMenuOpen(false);
 
-    if (label !== "Learning Hub") {
-      setNotice(`${label} is coming soon! We're building your study space.`);
-    } else {
-      setNotice("");
-    }
+  const routes = {
+    "Learning Hub": "/hub",
+    "My Notes": "/note",
+    "Flashcards": "/flashcards",
+    "Quizzes": "/quizzes",
+    "Progress": "/progress",
+    "Settings": "/settings",
   };
+
+  navigate(routes[label]);
+};
 
   const handleFileChange = (event) => {
     const file = event.target.files?.[0];
