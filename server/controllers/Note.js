@@ -16,15 +16,28 @@ const allowedTypes = [
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 10 * 1024 * 1024,
-  },
+  limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (allowedTypes.includes(file.mimetype)) {
       return cb(null, true);
     }
 
     cb(new Error("Only PDF, DOC, DOCX, and TXT files are allowed."));
+  },
+});
+
+const imageUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 8 * 1024 * 1024,
+    files: 20,
+  },
+  fileFilter: (req, file, cb) => {
+    if (["image/jpeg", "image/png"].includes(file.mimetype)) {
+      return cb(null, true);
+    }
+
+    cb(new Error("Only JPG, JPEG, and PNG images are supported."));
   },
 });
 
@@ -45,6 +58,25 @@ const textToPdf = (text) =>
     doc.end();
   });
 
+const uploadBufferToCloudinary = (buffer, originalName) =>
+  new Promise((resolve, reject) => {
+    const publicName = originalName.replace(/\.[^/.]+$/, "");
+
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "cramify/notes",
+       resource_type: "image",
+        public_id: `${Date.now()}-${publicName}`,
+      },
+      (error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      }
+    );
+
+    Readable.from(buffer).pipe(stream);
+  });
+
 const uploadNote = async (req, res) => {
   try {
     if (!req.file) {
@@ -57,10 +89,7 @@ const uploadNote = async (req, res) => {
     let fileType = req.file.mimetype;
     let originalName = req.file.originalname;
 
-    const extension = originalName
-      .split(".")
-      .pop()
-      .toLowerCase();
+    const extension = originalName.split(".").pop().toLowerCase();
 
     if (extension === "txt") {
       fileBuffer = await textToPdf(
@@ -84,24 +113,10 @@ const uploadNote = async (req, res) => {
       (req.body.title || "").trim() 
       originalName.replace(/\.[^/.]+$/, "");
 
-    const result = await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          folder: "cramify/notes",
-          resource_type: "raw",
-          public_id: `${Date.now()}-${originalName.replace(
-            /\.[^/.]+$/,
-            ""
-          )}`,
-        },
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
-        }
-      );
-
-      Readable.from(fileBuffer).pipe(stream);
-    });
+    const result = await uploadBufferToCloudinary(
+      fileBuffer,
+      originalName
+    );
 
     const note = await Note.create({
       user: req.user,
@@ -110,10 +125,8 @@ const uploadNote = async (req, res) => {
       fileUrl: result.secure_url,
       fileType,
       size: fileBuffer.length,
+      scanned: false,
     });
-
-    console.log("Uploaded file type:", fileType);
-    console.log("Uploaded file name:", originalName);
 
     return res.status(201).json({
       message: ["txt", "doc", "docx"].includes(extension)
@@ -126,6 +139,104 @@ const uploadNote = async (req, res) => {
 
     return res.status(500).json({
       message: "Failed to convert or upload note. Please try again.",
+    });
+  }
+};
+
+const scanNotesToPdf = async (req, res) => {
+  try {
+    const images = req.files || [];
+
+    if (!images.length) {
+      return res.status(400).json({
+        message: "Please capture or select at least one image.",
+      });
+    }
+
+    const title =
+      (req.body.title || "").trim() || "Scanned Notes";
+      const safeTitle =
+      title
+        .replace(/[<>:"/\\|?*\x00-\x1F]/g, "")
+        .slice(0, 100)
+        .trim() || "Scanned Notes";
+
+    const pdfBuffer = await new Promise((resolve, reject) => {
+      const pdf = new PDFDocument({
+        autoFirstPage: false,
+        compress: true,
+      });
+
+      const chunks = [];
+
+      pdf.on("data", (chunk) => chunks.push(chunk));
+      pdf.on("end", () => resolve(Buffer.concat(chunks)));
+      pdf.on("error", reject);
+
+      try {
+        for (const image of images) {
+          const dimensions = pdf.openImage(image.buffer);
+
+          const pageWidth = 595.28;
+          const pageHeight = 841.89;
+          const padding = 24;
+
+          const availableWidth = pageWidth - padding * 2;
+          const availableHeight = pageHeight - padding * 2;
+
+          const scale = Math.min(
+            availableWidth / dimensions.width,
+            availableHeight / dimensions.height
+          );
+
+          const width = dimensions.width * scale;
+          const height = dimensions.height * scale;
+
+          pdf.addPage({
+            size: "A4",
+            margin: 0,
+          });
+
+          pdf.image(
+            image.buffer,
+            (pageWidth - width) / 2,
+            (pageHeight - height) / 2,
+            { width, height }
+          );
+        }
+
+        pdf.end();
+      } catch (error) {
+        reject(error);
+      }
+    });
+
+    const originalName = `${safeTitle}.pdf`;
+
+    const result = await uploadBufferToCloudinary(
+      pdfBuffer,
+      originalName
+    );
+
+    const note = await Note.create({
+      user: req.user,
+      title: safeTitle,
+      originalName,
+      fileUrl: result.secure_url,
+      fileType: "application/pdf",
+      size: pdfBuffer.length,
+      scanned: true,
+    });
+
+    return res.status(201).json({
+      message: "Scanned pages converted to PDF and saved successfully.",
+      note,
+    });
+  } catch (error) {
+    console.error("Scan notes to PDF error:", error);
+
+    return res.status(500).json({
+      message: "Failed to create the PDF. Please try again.",
     });
   }
 };
@@ -160,6 +271,7 @@ const deleteNote = async (req, res) => {
     }
 
     await note.deleteOne();
+
     return res.status(200).json({
       message: "Note deleted successfully.",
     });
@@ -174,7 +286,9 @@ const deleteNote = async (req, res) => {
 
 module.exports = {
   upload,
+  imageUpload,
   uploadNote,
+  scanNotesToPdf,
   getNotes,
   deleteNote,
 };

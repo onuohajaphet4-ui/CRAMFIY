@@ -28,6 +28,10 @@ const noteSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    scanned: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
