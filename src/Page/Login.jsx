@@ -29,7 +29,7 @@ function Login() {
       setLoading(true);
 
       const res = await fetch(
-        "https://cramfiy.onrender.com/api/auth/login",
+        "http://localhost:3000/api/auth/login",
         {
           method: "POST",
           headers: {

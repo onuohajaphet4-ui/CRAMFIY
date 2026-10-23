@@ -43,7 +43,7 @@ function Notes() {
       );
 
       const response = await fetch(
-        "https://cramfiy.onrender.com/api/notes/upload",
+        "http://localhost:3000/api/notes/upload",
         {
           method: "POST",
           headers: {
@@ -90,7 +90,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        "https://cramfiy.onrender.com/api/notes",
+        "http://localhost:3000/api/notes",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -133,7 +133,7 @@ useEffect(() => {
 
   try {
     const response = await fetch(
-      `https://cramfiy.onrender.com/api/notes/${id}`,
+      `http://localhost:3000/api/notes/${id}`,
       {
         method: "DELETE",
         headers: {
