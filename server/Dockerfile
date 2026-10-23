@@ -6,10 +6,11 @@ RUN apt-get update \
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY server/package*.json ./
+
 RUN npm install --omit=dev
 
-COPY . .
+COPY server/ ./
 
 ENV NODE_ENV=production
 
